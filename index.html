@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="description" content="Controle sua hidratação diária com alarmes personalizados da sua própria voz e acompanhe seu histórico de consumo.">
+  <title>AquaVoice - Controle de Hidratação</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="brand">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+        </svg>
+        <h1>AquaVoice</h1>
+      </div>
+      <div class="streak-badge" id="streak-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color: #f59e0b;">
+          <path d="M17.66 11.57c-.77-.77-1.9-1.07-2.92-.88l.96-3.8c.11-.47-.1-.97-.5-1.24L10 2.25v6.52c-.67-.53-1.47-.9-2.34-1.03l.97-3.86a.996.996 0 0 0-.5-1.24L3 2.25v6.52c-1.33.15-2.5 1.05-3 2.23C-.39 12.23.16 13.56 1.15 14l1.24 3.73c.18.53.68.87 1.24.87h12c1.1 0 2-.9 2-2v-4.13c1.61.16 3.1-.73 3.66-2.2.56-1.47 0-3.13-1.39-3.7z"/>
+        </svg>
+        <span id="streak-count">0</span> dias seguidos
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+      
+      <!-- TAB 1: CONSUMO (HOME) -->
+      <section id="tab-home" class="tab-content active">
+        <!-- Progress Wave Circle -->
+        <div class="progress-card">
+          <div class="wave-circle">
+            <div class="water-fill" id="water-fill">
+              <div class="wave-element"></div>
+              <div class="wave-element"></div>
+            </div>
+            <div class="progress-text">
+              <div class="progress-percent" id="progress-percent">0%</div>
+              <div class="progress-fraction" id="progress-fraction">0 / 2000 ml</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Add Section -->
+        <div class="quick-add-section">
+          <h3 class="section-title">Registro Rápido</h3>
+          <div class="quick-grid">
+            <div class="quick-card" onclick="addWater(200, 'Copo')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M18 2H6L4 22h16L18 2zM6.4 4h11.2l1.6 16H4.8L6.4 4z"/>
+              </svg>
+              <span class="amount">200 ml</span>
+              <span class="label">Copo</span>
+            </div>
+            <div class="quick-card" onclick="addWater(350, 'Copo Grande')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M19 2H5l1.5 15h11L19 2zm-2.8 2l-1.1 11H8.9L7.8 4h8.4zM4 20h16v2H4v-2z"/>
+              </svg>
+              <span class="amount">350 ml</span>
+              <span class="label">Copo Grande</span>
+            </div>
+            <div class="quick-card" onclick="addWater(500, 'Garrafa')">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M15 2h-6V0h6v2zm1 6V4H8v4c-2.2 0-4 1.8-4 4v10h16V12c0-2.2-1.8-4-4-4zm-6-2h4v2h-4V6zm8 14H6v-8c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2v8z"/>
+              </svg>
+              <span class="amount">500 ml</span>
+              <span class="label">Garrafa</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Add Trigger -->
+        <button class="custom-add-btn" id="btn-custom-add">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Adicionar Quantidade Personalizada
+        </button>
+      </section>
+
+      <!-- TAB 2: ALARMES (CONFIGURAÇÃO) -->
+      <section id="tab-alarm" class="tab-content">
+        <!-- Goal Config -->
+        <div class="panel-card">
+          <h3 class="section-title" style="margin-bottom: 16px;">Meta de Consumo</h3>
+          <div class="form-group">
+            <label for="input-daily-goal">Meta Diária (ml)</label>
+            <input type="number" id="input-daily-goal" class="form-control" value="2000" min="500" max="10000" step="100">
+          </div>
+        </div>
+
+        <!-- Alarm Settings -->
+        <div class="panel-card">
+          <div class="toggle-switch-container" style="margin-bottom: 20px;">
+            <span class="toggle-label font-sans">Lembretes de Água</span>
+            <label class="switch">
+              <input type="checkbox" id="toggle-alarms">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="input-row">
+            <div class="form-group">
+              <label for="alarm-start">Início</label>
+              <input type="time" id="alarm-start" class="form-control" value="08:00">
+            </div>
+            <div class="form-group">
+              <label for="alarm-end">Fim</label>
+              <input type="time" id="alarm-end" class="form-control" value="22:00">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="alarm-interval">Intervalo (minutos)</label>
+            <input type="number" id="alarm-interval" class="form-control" value="60" min="5" max="360">
+          </div>
+
+          <div class="alarm-tips">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Recorrência
+            </h4>
+            <p>O alarme é ativado automaticamente todos os dias úteis e finais de semana dentro da janela de horários configurada.</p>
+          </div>
+        </div>
+
+        <!-- Custom voice recording -->
+        <div class="panel-card">
+          <h3 class="section-title" style="margin-bottom: 16px;">Som de Alarme com sua Voz</h3>
+          <div class="recorder-container">
+            <div class="record-btn-container">
+              <div class="pulse-ring" id="record-pulse"></div>
+              <button class="record-btn" id="btn-record">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                </svg>
+              </button>
+            </div>
+            <span class="recorder-status" id="record-status">Toque no microfone para gravar</span>
+            <canvas class="waveform-canvas" id="waveform"></canvas>
+
+            <!-- Custom Voice Preview -->
+            <div class="audio-preview-card hidden" id="audio-preview">
+              <button class="btn-icon play-btn" id="btn-play-voice">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </button>
+              <span class="audio-duration">Gravação Salva</span>
+              <button class="btn-icon delete-btn" id="btn-delete-voice">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="alarm-tips" style="margin-top: 16px;">
+            <h4>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Importante
+            </h4>
+            <p>Se você não gravar sua voz, o aplicativo emitirá um sinal sonoro sintetizado em tempo real.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: HISTÓRICO -->
+      <section id="tab-history" class="tab-content">
+        <!-- Stats summary -->
+        <div class="panel-card">
+          <h3 class="section-title" style="margin-bottom: 16px;">Estatísticas da Semana</h3>
+          <div class="chart-container" id="weekly-chart">
+            <!-- Bars will be generated programmatically -->
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Seg</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Ter</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Qua</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Qui</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Sex</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Sáb</span>
+            </div>
+            <div class="chart-bar-wrapper">
+              <div class="chart-bar-bg"><div class="chart-bar-fill" style="height: 0%"></div></div>
+              <span class="chart-day-label">Dom</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Log -->
+        <div class="panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3 class="section-title">Consumo de Hoje</h3>
+            <button class="btn-icon delete-btn" id="btn-clear-history" title="Limpar Histórico" style="background: none; border: none;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/>
+              </svg>
+            </button>
+          </div>
+          <div class="history-timeline" id="history-list">
+            <!-- Dynamic elements go here -->
+            <div class="history-empty">Nenhum copo de água registrado hoje.</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav>
+      <button class="nav-btn active" data-tab="home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Consumo
+      </button>
+      <button class="nav-btn" data-tab="alarm">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+        Alarmes
+      </button>
+      <button class="nav-btn" data-tab="history">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+        </svg>
+        Histórico
+      </button>
+    </nav>
+
+    <!-- MODAL OVERLAYS -->
+    <!-- Custom amount modal -->
+    <div class="modal-overlay" id="modal-custom-add">
+      <div class="modal-card">
+        <div class="modal-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+          </svg>
+        </div>
+        <h3 class="modal-title">Adicionar Água</h3>
+        <p class="modal-desc">Digite a quantidade de água consumida:</p>
+        <div class="custom-modal-content">
+          <input type="number" id="input-custom-amount" class="modal-input" placeholder="300" min="10" max="2000">
+          <div class="modal-btn-row">
+            <button class="modal-btn-secondary" id="btn-cancel-custom">Cancelar</button>
+            <button class="modal-btn" id="btn-save-custom">Registrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- General Info Modal -->
+    <div class="modal-overlay" id="modal-info">
+      <div class="modal-card">
+        <div class="modal-icon" id="info-modal-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </div>
+        <h3 class="modal-title" id="info-modal-title">Aviso</h3>
+        <p class="modal-desc" id="info-modal-desc">Esta é uma notificação do sistema.</p>
+        <button class="modal-btn" id="btn-close-info">Entendido</button>
+      </div>
+    </div>
+
+    <!-- ALARM TRIGGER SCREEN -->
+    <div class="alarm-trigger-overlay" id="alarm-overlay">
+      <div class="alarm-icon-big">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+      </div>
+      <h2 class="alarm-trigger-title">Hora de Beber Água!</h2>
+      <p class="alarm-trigger-msg">Seu corpo precisa de hidratação. Beba um copo d'água agora para manter sua saúde em dia!</p>
+      <button class="alarm-stop-btn" id="btn-stop-alarm">Parar Lembrete</button>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
