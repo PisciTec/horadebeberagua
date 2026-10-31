@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Impede que o build release remova o som usado pelo canal de notificação -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/chime" />

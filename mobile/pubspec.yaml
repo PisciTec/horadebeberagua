@@ -1,0 +1,38 @@
+name: aquavoice
+description: "AquaVoice - Controle de hidratação com alarmes na sua própria voz."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  # Notificações locais agendadas (lembretes com o app fechado)
+  flutter_local_notifications: ^19.4.0
+  timezone: ^0.10.0
+  # Gravação da voz (WAV, compatível com som de notificação do iOS)
+  record: ^6.0.0
+  # Reprodução do alarme em loop / feedback sonoro
+  audioplayers: ^6.1.0
+  # Persistência
+  sqflite: ^2.4.1
+  shared_preferences: ^2.3.2
+  path_provider: ^2.1.4
+  path: ^1.9.0
+  # Fonte Outfit (mesma do PWA)
+  google_fonts: ^6.2.1
+  intl: ^0.20.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/sounds/
