@@ -80,4 +80,6 @@ WATCHER=$!
 trap 'kill $WATCHER 2>/dev/null; rm -f "$PIDFILE"' EXIT
 
 say "Iniciando o AquaVoice (a primeira compilação demora alguns minutos)..."
-flutter run "${DEVICE_ARG[@]}" --pid-file "$PIDFILE"
+# `script` mantém o terminal interativo e grava a saída em .aquavoice-run.log
+# (permite acompanhar/diagnosticar erros de compilação sem copiar e colar).
+script -q "$ROOT/.aquavoice-run.log" flutter run "${DEVICE_ARG[@]}" --pid-file "$PIDFILE"
