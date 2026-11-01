@@ -1,0 +1,5 @@
+{
+  "dart.flutterHotReloadOnSave": "all",
+  "editor.formatOnSave": true,
+  "[dart]": { "editor.rulers": [100] }
+}

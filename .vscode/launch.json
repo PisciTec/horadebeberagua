@@ -1,0 +1,23 @@
+{
+  // F5 = rodar com depuração. Escolha o dispositivo (iPhone Simulator) na barra inferior do VS Code.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "AquaVoice (debug)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "mobile",
+      "program": "lib/main.dart",
+      "preLaunchTask": "AquaVoice: preparar projeto"
+    },
+    {
+      "name": "AquaVoice (release, mais rápido)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "mobile",
+      "program": "lib/main.dart",
+      "flutterMode": "release",
+      "preLaunchTask": "AquaVoice: preparar projeto"
+    }
+  ]
+}

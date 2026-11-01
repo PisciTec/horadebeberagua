@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "AquaVoice: preparar projeto",
+      "type": "shell",
+      "command": "bash tool/setup_platforms.sh",
+      "options": { "cwd": "${workspaceFolder}/mobile" },
+      "problemMatcher": []
+    },
+    {
+      "label": "AquaVoice: rodar testes",
+      "type": "shell",
+      "command": "flutter test",
+      "options": { "cwd": "${workspaceFolder}/mobile" },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "AquaVoice: abrir Simulador do iPhone",
+      "type": "shell",
+      "command": "open -a Simulator",
+      "problemMatcher": []
+    }
+  ]
+}

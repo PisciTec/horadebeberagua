@@ -45,6 +45,20 @@ Depuração USB ativada.
 
 Pré-requisito para iOS: Xcode instalado (App Store) com a plataforma iOS baixada.
 
+### Pelo VS Code (recomendado para desenvolver e depurar)
+
+1. Instale a extensão **Flutter** (o VS Code sugere ao abrir a pasta).
+2. Abra a **pasta raiz do repositório** no VS Code.
+3. Na barra inferior, clique no nome do dispositivo e escolha o **iPhone Simulator**.
+4. Pressione **F5** (configuração "AquaVoice (debug)"). Breakpoints, inspeção de
+   variáveis e hot reload ao salvar já vêm configurados.
+
+### Pelo Xcode
+
+O Xcode serve para a parte nativa (assinatura, permissões, instalar no iPhone
+físico), mas não depura o código Dart. Depois de rodar o projeto uma vez, abra
+`mobile/ios/Runner.xcworkspace` (ou `Runner.xcodeproj`) e use ▶︎ Run.
+
 ## Estrutura
 
 ```

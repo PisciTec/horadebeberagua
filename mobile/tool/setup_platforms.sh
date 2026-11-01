@@ -5,8 +5,12 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-echo "==> Gerando arquivos de plataforma (android/ios)..."
-flutter create --org com.nicacio --project-name aquavoice --platforms=android,ios . >/dev/null
+if [ -d ios/Runner.xcodeproj ] && [ -d android/app/src/main/kotlin ] && [ "${1:-}" != "--force" ]; then
+  echo "==> Plataformas já geradas."
+else
+  echo "==> Gerando arquivos de plataforma (android/ios)..."
+  flutter create --org com.nicacio --project-name aquavoice --platforms=android,ios .
+fi
 
 # ---------------------------------------------------------------- Android
 GRADLE=android/app/build.gradle.kts
